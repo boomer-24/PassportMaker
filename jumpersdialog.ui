@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>JumpersDialog</class>
+ <widget class="QDialog" name="JumpersDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>330</width>
+    <height>190</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="res.qrc">
+    <normaloff>:/logo/rainbow.png</normaloff>:/logo/rainbow.png</iconset>
+  </property>
+  <widget class="QTableWidget" name="tableWidget_jumpers">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>60</y>
+     <width>310</width>
+     <height>110</height>
+    </rect>
+   </property>
+   <attribute name="horizontalHeaderVisible">
+    <bool>false</bool>
+   </attribute>
+   <attribute name="verticalHeaderVisible">
+    <bool>true</bool>
+   </attribute>
+  </widget>
+  <widget class="QPushButton" name="pushButton_removeColomn">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>0</y>
+     <width>75</width>
+     <height>50</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Удалить
+выбранный
+столбец</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_jumperPlaced">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>0</y>
+     <width>100</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&quot;Установлена&quot;</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_jumperNotPlaced">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>30</y>
+     <width>100</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&quot;Не установлена&quot;</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_appendColomn">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>0</y>
+     <width>75</width>
+     <height>50</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Добавить
+перемычку</string>
+   </property>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>pushButton_appendColomn</tabstop>
+  <tabstop>pushButton_removeColomn</tabstop>
+  <tabstop>pushButton_jumperPlaced</tabstop>
+  <tabstop>pushButton_jumperNotPlaced</tabstop>
+  <tabstop>tableWidget_jumpers</tabstop>
+ </tabstops>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
+ <connections/>
+</ui>
