@@ -32,9 +32,9 @@ JumpersDialog::~JumpersDialog()
     delete this->ui_;
 }
 
-void JumpersDialog::RemoveColumn(int _colomnNumber)
+void JumpersDialog::RemoveColumn(int _columnNumber)
 {
-    this->ui_->tableWidget_jumpers->removeColumn(_colomnNumber);
+    this->ui_->tableWidget_jumpers->removeColumn(_columnNumber);
     this->ResizeLikeTableSize();
 }
 

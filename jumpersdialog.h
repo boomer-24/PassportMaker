@@ -17,7 +17,7 @@ public:
     ~JumpersDialog();
 
     void SetKY(const QString& _KY);
-    void RemoveColumn(int _colomnNumber);
+    void RemoveColumn(int _columnNumber);
     QString GetJ(int _number);
     QVector<QPair<QString, QString>> GetTableContent() const;
     void ResizeLikeTableSize();

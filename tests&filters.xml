@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<general>
+    <filter_TT>Напряжение</filter_TT>
+    <filter_TT>Ток</filter_TT>
+    <filter_TT>Сопротивление</filter_TT>
+    <filter_TT>Время</filter_TT>
+    <test_TT>Начальный ток стока (1), мА</test_TT>
+    <test_TT>Начальный ток стока (2), мА</test_TT>
+    <test_TT>Пороговое напряжение (1), В</test_TT>
+    <test_TT>Пороговое напряжение (2), В</test_TT>
+    <test_TT>Постоянное прямое напряжение диода, при Iпр=10мА, В</test_TT>
+    <test_TT>Привет, Илья!</test_TT>
+    <test_TT>Проверка наличия светимости</test_TT>
+    <test_TT>Тест времени реакции Ильи</test_TT>
+    <test_TT>Тест проверки желания танцевать, хз</test_TT>
+    <test_TT>Тест проверки какой-нибудь фигни</test_TT>
+    <test_TT>Тест сопротивления Ильи</test_TT>
+    <test_TT>Ток утечки затвора (1), нА</test_TT>
+    <test_TT>Ток утечки затвора (2), нА</test_TT>
+</general>

@@ -458,121 +458,53 @@ void PassportMaker2K::OneMoreListCreate()
         selection_->dynamicCall("TypeParagraph()");
     }
 
+
+    this->FillTableConnection();
+
+    selection_->dynamicCall("InsertBreak()", "wdPageBreak"); //новый лист
+}
+
+void PassportMaker2K::FillTableConnection()
+{
     font_->setProperty("Bold", true);
-    tableName = "Таблица ";
+    QString tableName = "Таблица ";
     tableName.append(QString::number(++this->tableNumber_)).append(". Подключение выводов адаптера к тестеру.");
     selection_->dynamicCall("TypeText(const QString&)", tableName);
     font_->setProperty("Bold", false);
     range_ = selection_->querySubObject("Range()");
-    table_ = tables_->querySubObject("Add(Range,NumRows,NumColumns, DefaultTableBehavior, AutoFitBehavior)",range_->asVariant(), 3, 8, 1, 2);
-
-    if (this->PIN_H_)
+    if (!this->vvTableConnection_.isEmpty())
     {
-        QAxObject* cell11 = table_->querySubObject("Cell(Row, Column)", 1, 1);
-        QAxObject* borders = cell11->querySubObject("Borders()");
-        QAxObject* border = borders->querySubObject("Item(WdBorderType)", "wdBorderDiagonalDown");
-        border->setProperty("LineStyle", "wdLineStyleSingle");
+        table_ = tables_->querySubObject("Add(Range,NumRows,NumColumns, DefaultTableBehavior, AutoFitBehavior)",
+                                         range_->asVariant(), this->vvTableConnection_.size(), this->vvTableConnection_.first()/*.at(0)*/.size(), 1, 2);
 
-        selection_->dynamicCall("TypeText(const QString&)","    Тестер\n\n\nАдаптер");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","Pin1");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","SVPN");
-        selection_->dynamicCall("moveRight()"); selection_->dynamicCall("moveUp()"); selection_->dynamicCall("moveUp()");
-
-        selection_->dynamicCall("TypeText(const QString&)","    \n    135");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","PinH5");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","SVPN");
-        selection_->dynamicCall("moveRight()"); selection_->dynamicCall("moveUp()"); selection_->dynamicCall("moveUp()");
-
-        selection_->dynamicCall("TypeText(const QString&)","    \n    148");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","PinH10");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","SVPN");
-        selection_->dynamicCall("moveRight()"); selection_->dynamicCall("moveUp()"); selection_->dynamicCall("moveUp()");
-
-        selection_->dynamicCall("TypeText(const QString&)","    \n    1029");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","PinH3");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","SVPN");
-        selection_->dynamicCall("moveRight()"); selection_->dynamicCall("moveUp()"); selection_->dynamicCall("moveUp()");
-
-        selection_->dynamicCall("TypeText(const QString&)","    \n    1030");
-        selection_->dynamicCall("moveDown()");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","SVPN");
-        selection_->dynamicCall("moveRight()"); selection_->dynamicCall("moveUp()"); selection_->dynamicCall("moveUp()");
-
-        selection_->dynamicCall("TypeText(const QString&)","    \n    1033");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","PinH3");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","SVPN");
-        selection_->dynamicCall("moveRight()"); selection_->dynamicCall("moveUp()"); selection_->dynamicCall("moveUp()");
-
-        selection_->dynamicCall("TypeText(const QString&)","    \n    1053");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","PinH5");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","SVPN1(2)");
-        selection_->dynamicCall("moveRight()"); selection_->dynamicCall("moveUp()"); selection_->dynamicCall("moveUp()");
-
-        selection_->dynamicCall("TypeText(const QString&)","    \n    1064");
-        selection_->dynamicCall("moveDown()");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","SVPN");
-        selection_->dynamicCall("moveDown()");
-
-        //        selection2K_->dynamicCall("TypeText(const QString&)","Рекомендуется проверять на адаптере Adap60 (тестер 1029).");
-        selection_->dynamicCall("TypeParagraph()");
-    } else
-    {
-        //        font_->setProperty("Bold", true);
-        //        selection_->dynamicCall("TypeText(const QString&)", "Таблица 5. Подключение выводов адаптера к тестеру.");
-        //        font_->setProperty("Bold", false);
-        //        range_ = selection_->querySubObject("Range()");
-        //        table_ = tables_->querySubObject("Add(Range,NumRows,NumColumns, DefaultTableBehavior, AutoFitBehavior)",range_->asVariant(), 3, 8, 1, 2);
-
-        QAxObject* cell11 = table_->querySubObject("Cell(Row, Column)", 1, 1);
-        QAxObject* borders = cell11->querySubObject("Borders()");
-        QAxObject* border = borders->querySubObject("Item(WdBorderType)", "wdBorderDiagonalDown");
-        border->setProperty("LineStyle", "wdLineStyleSingle");
-
-        selection_->dynamicCall("TypeText(const QString&)","    Тестер\n\n\nАдаптер");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","Pin1");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","SVPN");
-        selection_->dynamicCall("moveRight()"); selection_->dynamicCall("moveUp()"); selection_->dynamicCall("moveUp()");
-
-        selection_->dynamicCall("TypeText(const QString&)","    \n    135");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","Pin1");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","SVPN");
-        selection_->dynamicCall("moveRight()"); selection_->dynamicCall("moveUp()"); selection_->dynamicCall("moveUp()");
-
-        selection_->dynamicCall("TypeText(const QString&)","    \n    148");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","Pin1");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","SVPN");
-        selection_->dynamicCall("moveRight()"); selection_->dynamicCall("moveUp()"); selection_->dynamicCall("moveUp()");
-
-        selection_->dynamicCall("TypeText(const QString&)","    \n    1029");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","Pin1");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","SVPN");
-        selection_->dynamicCall("moveRight()"); selection_->dynamicCall("moveUp()"); selection_->dynamicCall("moveUp()");
-
-        selection_->dynamicCall("TypeText(const QString&)","    \n    1030");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","Pin1");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","SVPN");
-        selection_->dynamicCall("moveRight()"); selection_->dynamicCall("moveUp()"); selection_->dynamicCall("moveUp()");
-
-        selection_->dynamicCall("TypeText(const QString&)","    \n    1033");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","Pin1");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","SVPN");
-        selection_->dynamicCall("moveRight()"); selection_->dynamicCall("moveUp()"); selection_->dynamicCall("moveUp()");
-
-        selection_->dynamicCall("TypeText(const QString&)","    \n    1053");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","Pin1");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","SVPN1(2)");
-        selection_->dynamicCall("moveRight()"); selection_->dynamicCall("moveUp()"); selection_->dynamicCall("moveUp()");
-
-        selection_->dynamicCall("TypeText(const QString&)","    \n    1064");
-        selection_->dynamicCall("moveDown()");   selection_->dynamicCall("TypeText(const QString&)","Pin1");
-        selection_->dynamicCall("moveDown()"); selection_->dynamicCall("TypeText(const QString&)","SVPN");
-        selection_->dynamicCall("moveDown()");
-
-        //        selection2K_->dynamicCall("TypeText(const QString&)","Рекомендуется проверять на адаптере Adap60 (тестер 1029).");
-        selection_->dynamicCall("TypeParagraph()");
-
+//        QAxObject* rows = table_->querySubObject("Rows()");
+//        qDebug() << "rows" << rows->asVariant().toString();   //НЕ РАБОТАЕТ ТАК
+//        rows->setProperty("Alignment", "wdAlignRowCenter");
+        for (int row = 0; row < this->vvTableConnection_.size(); row++)
+        {
+            for (int column = 0; column < this->vvTableConnection_.at(row).size(); column++)
+            {
+                if (row == 0 && column == 0)
+                {
+                    QAxObject* cell11 = table_->querySubObject("Cell(Row, Column)", row + 1, column + 1);
+                    QAxObject* borders = cell11->querySubObject("Borders()");
+                    QAxObject* border = borders->querySubObject("Item(WdBorderType)", "wdBorderDiagonalDown");
+                    border->setProperty("LineStyle", "wdLineStyleSingle");
+                    QAxObject* rangeCell = cell11->querySubObject("Range()");
+                    rangeCell->dynamicCall("InsertAfter(Text)", "    Тестер\n\n\nАдаптер");
+                    selection_->dynamicCall("moveDown()");
+                    selection_->dynamicCall("moveDown()");
+                    selection_->dynamicCall("moveDown()");
+                    selection_->dynamicCall("moveDown()");
+                }                
+                QAxObject* cell = table_->querySubObject("Cell(Row,  Column)", row + 1, column + 1);
+                QAxObject* rangeCell = cell->querySubObject("Range()");
+                rangeCell->dynamicCall("InsertAfter(Text)", this->vvTableConnection_.at(row).at(column));
+            }
+            selection_->dynamicCall("moveDown()");
+        }
+        //        for (int i = 0; i < this->vvStrAndTableConnection_.size() + 10; i++)
     }
-    selection_->dynamicCall("InsertBreak()", "wdPageBreak"); //новый лист
 }
 
 void PassportMaker2K::TestersList()
@@ -633,7 +565,7 @@ void PassportMaker2K::TestersList()
             else
             {
                 jumperPos.append(" в положение ").append(rPair.second).append(",");
-            }            
+            }
         }
         if (jumperPos.at(jumperPos.size() - 1) == ",")
             jumperPos.remove(jumperPos.size() - 1, 1);
@@ -651,13 +583,18 @@ void PassportMaker2K::TestersList()
     font_->setProperty("Bold", false);
 
     selection_->querySubObject("InlineShapes")->dynamicCall("AddHorizontalLineStandard()");
-
     font_->setProperty("Size", 12);    font_->setProperty("Name", "Times New Roman");
 
-    if (this->PIN_H_)
-        selection_->dynamicCall("TypeText(const QString&)", this->connectionInfoPinH_);
-    else
-        selection_->dynamicCall("TypeText(const QString&)", this->connectionInfoPinS_);
+
+
+    selection_->dynamicCall("TypeText(const QString&)", this->connectionInfo2K_);
+//    if (this->PIN_H_)
+//        selection_->dynamicCall("TypeText(const QString&)", this->connectionInfoPinH_);
+//    else
+//        selection_->dynamicCall("TypeText(const QString&)", this->connectionInfoPinS_);
+
+
+
     selection_->querySubObject("InlineShapes")->dynamicCall("AddHorizontalLineStandard()");
 
     selection_->dynamicCall("TypeParagraph()");
@@ -673,7 +610,7 @@ void PassportMaker2K::TestersList()
     QAxObject* cell_12 = table_->querySubObject("Cell(Row,  Column)", 1, 2);
     cell_12->dynamicCall("SetWidth(ColumnWidth, RulerStyle)", "5.5", "wdAdjustNone");
     rangeCell = cell_12->querySubObject("Range()");
-    rangeCell->dynamicCall("InsertAfter(Text)", this->selectedAnimal_);
+    rangeCell->dynamicCall("InsertAfter(Text)", QString("_______").append(this->selectedAnimal_));
 
     QAxObject* cell_21 = table_->querySubObject("Cell(Row,  Column)", 2, 1);
     cell_21->dynamicCall("SetWidth(ColumnWidth, RulerStyle)", "10.5", "wdAdjustNone");
@@ -869,7 +806,7 @@ void PassportMaker2K::SaveDocx()
     bool condition = false;
     while (!condition) {
         if (QFile(QString(absolutePath).append(".docx")).exists())
-            absolutePath.append("_Newer");
+            absolutePath.append("_создан_").append(QDateTime::currentDateTime().toString("yyyy.MM.dd-hh-mm-ss"));
         else condition = true;
     }
     absolutePath.append(".docx");
@@ -880,4 +817,28 @@ void PassportMaker2K::SaveDocx()
 const QStringList& PassportMaker2K::GetSlFormat() const
 {
     return this->slFileFormats_;
+}
+
+void PassportMaker2K::setStrAndVvTableConnection(const QVector<QVector<QString> > &_vvTableConnection)
+{
+    vvTableConnection_ = _vvTableConnection;
+    if (!_vvTableConnection.isEmpty())
+    {
+        for (int i = 1; i < _vvTableConnection.at(0).size(); i++) // тут проход по нулевой строке с номерами тестеров
+        {
+            QString testerNumber = _vvTableConnection.at(0).at(i);
+            this->connectionInfo2K_.append("Formula2K №").append(testerNumber).append(":").append("\n");
+            for (int j = 1; j < _vvTableConnection.size(); j++) // тут по всем строкам таблицы, кроме первой
+            {
+                QString strResult("Подключить кабель «");
+                QString valueFirstColumn(_vvTableConnection.at(j).at(0));
+                strResult.append(valueFirstColumn);
+                strResult.append("» адаптера к разъёму «");
+                QString valueInCross(_vvTableConnection.at(j).at(i));
+                strResult.append(valueInCross);
+                strResult.append("» Тестера.\n");
+                this->connectionInfo2K_.append(strResult);
+            }
+        }
+    }
 }

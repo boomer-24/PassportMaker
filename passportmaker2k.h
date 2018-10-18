@@ -33,7 +33,8 @@ private:
 
     QString selectedMode_;
     bool PIN_H_;
-
+    QVector<QVector<QString>> vvTableConnection_;
+    QString connectionInfo2K_;
     QString executableFile_;
 
     QString selectedChief_;
@@ -85,8 +86,9 @@ public:
     void TitleListCreate();
     void SecondListCreate();
     void OneMoreListCreate();
+    void FillTableConnection();
     void TestersList();
-    void AddHashSheet();    
+    void AddHashSheet();
     void SaveDocx();
 
     void SetGroupChief(const QString &_chiefName);
@@ -108,6 +110,7 @@ public:
     void SetPinH(const bool& _pin);
     const QStringList& GetSlFormat() const;
     void SetVJPos(const QVector<QPair<QString, QString>> &_vJPos);
+    void setStrAndVvTableConnection(const QVector<QVector<QString> > &_vvTableConnection);
 };
 
 #endif // PASPORTMAKER2K_H

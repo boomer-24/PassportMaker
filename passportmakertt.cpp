@@ -534,7 +534,7 @@ void PassportMakerTT::TestersList()
     QAxObject* cell_12 = table_->querySubObject("Cell(Row,  Column)", 1, 2);
     cell_12->dynamicCall("SetWidth(ColumnWidth, RulerStyle)", "5.5", "wdAdjustNone");
     rangeCell = cell_12->querySubObject("Range()");
-    rangeCell->dynamicCall("InsertAfter(Text)", this->selectedAnimal_);
+    rangeCell->dynamicCall("InsertAfter(Text)", QString("_______").append(this->selectedAnimal_));
 
     QAxObject* cell_21 = table_->querySubObject("Cell(Row,  Column)", 2, 1);
     cell_21->dynamicCall("SetWidth(ColumnWidth, RulerStyle)", "10.5", "wdAdjustNone");
@@ -631,7 +631,7 @@ void PassportMakerTT::SaveDocx()
     bool condition = false;
     while (!condition) {
         if (QFile(QString(absolutePath).append(".docx")).exists())
-            absolutePath.append("_Newer");
+            absolutePath.append("_добавлен_").append(QDateTime::currentDateTime().toString("yyyy.MM.dd-hh-mm-ss"));
         else condition = true;
     }
     absolutePath.append(".docx");

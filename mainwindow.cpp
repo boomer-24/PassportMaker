@@ -34,8 +34,8 @@ MainWindow::MainWindow(QWidget *_parent) : QMainWindow(_parent), ui_(new Ui::Mai
     this->ui_->pushButton_jumpers->setEnabled(true);
     this->ui_->radioButton_jumpersYes->setChecked(true);
 
-    //    QObject::connect(&this->lastCheckDialog2K_, SIGNAL(signalCreatePassport()), this, SLOT(slotCreatePassport2K()));
-    //    QObject::connect(&this->lastCheckDialogTT_, SIGNAL(signalCreatePassport()), this, SLOT(slotCreatePassportTT()));
+    QObject::connect(&this->lastCheckDialog2K_, SIGNAL(signalCreatePassport()), this, SLOT(slotCreatePassport2K()));
+    QObject::connect(&this->lastCheckDialogTT_, SIGNAL(signalCreatePassport()), this, SLOT(slotCreatePassportTT()));
 }
 
 MainWindow::~MainWindow()
@@ -91,6 +91,7 @@ void MainWindow::Initialize(const QString &_path)
                         }
                         else if(domElement.tagName() == "tester_2K")
                         {
+                            this->connectionDialog_.InsertTesterFromXML(domElement.text());
                             this->slTesters2K_.push_back(domElement.text());
                         }
                         else if(domElement.tagName() == "defaultFormat_TT")
@@ -603,6 +604,8 @@ void MainWindow::slotCreatePassport2K()
     Passport2K.SetAdapterNumber(this->ui_->lineEdit_inputAdapterNumber_2k->text());
     Passport2K.SetKYname(this->ui_->lineEdit_inputKYName_2k->text());
     Passport2K.SetKYnumber(this->ui_->lineEdit_inputKYNumber_2k->text());
+
+    Passport2K.setStrAndVvTableConnection(this->connectionDialog_.getTableContent());
 
     Passport2K.InitializeElementsSl(this->slElements2K_);
     Passport2K.InitializeFileFormatSl(this->slFormats2K_);

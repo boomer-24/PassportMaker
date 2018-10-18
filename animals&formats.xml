@@ -1,0 +1,45 @@
+<general>
+<analogChief>Ю.Н. Джебраилова</analogChief>
+<digitChief>В.В. Песков</digitChief>
+
+<analogAnimal></analogAnimal>
+<analogAnimal>К.А. Кагирина</analogAnimal>
+<analogAnimal>И.Л. Клыков</analogAnimal>
+<digitAnimal>К.И. Клюев</digitAnimal>
+<analogAnimal>С.А. Ковешников</analogAnimal>
+<analogAnimal>А.С. Молотилин</analogAnimal>
+<digitAnimal>Д.Б. Фёдоров</digitAnimal>
+<digitAnimal>А.А. Харитонов</digitAnimal>
+<digitAnimal>Г.В. Шангин</digitAnimal>
+
+<animalPosition></animalPosition>
+<animalPosition>Ведущий инженер-программист отдела 138</animalPosition>
+<animalPosition>Инженер-программист 1-й категории отдела 138</animalPosition>
+<animalPosition>Инженер-программист 2-й категории отдела 138</animalPosition>
+<animalPosition>Инженер-программист отдела 138</animalPosition>
+
+<defaultFormat_2K>cpf</defaultFormat_2K>
+<defaultFormat_2K>tme</defaultFormat_2K>
+<defaultFormat_2K>tsq</defaultFormat_2K>
+
+<tester_2K>135</tester_2K>
+<tester_2K>148</tester_2K>
+<tester_2K>1029</tester_2K>
+<tester_2K>1030</tester_2K>
+<tester_2K>1033</tester_2K>
+<tester_2K>1053</tester_2K>
+
+<defaultFormat_TT>txt</defaultFormat_TT>
+
+<adapterName_2K>Универсальный на 64 канала</adapterName_2K>
+<adapterNumber_2K>ФРМИ4.448.001(-01/-02/-03)</adapterNumber_2K>
+
+<commentKY_TT>Провод 1 в разъём "К"
+Провод 2 в разъём "Э"
+Провод 3 не подключать
+
+Элемент устанавливать в отверстия 1,2 нижней левой позиции. Ключ между "1" и "4"</commentKY_TT>
+
+<test_TT>Постоянное прямое напряжение диода, при Iпр=10мА, В</test_TT>
+<test_TT>Проверка наличия светимости</test_TT>
+</general>
