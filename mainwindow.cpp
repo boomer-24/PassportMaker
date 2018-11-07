@@ -41,6 +41,7 @@ MainWindow::MainWindow(QWidget *_parent) : QMainWindow(_parent), ui_(new Ui::Mai
 MainWindow::~MainWindow()
 {
     this->SaveTestXml(this->testDialog_.GetTests(), this->testDialog_.GetFilters());
+//    this->threadTT_.quit(); // ТОБЫ БЫЛА МНОГОПОТОЧНОСТЬ С WINWORD НУЖНО НАПИСАТЬ CoEx где-то
     delete ui_;
 }
 
@@ -429,7 +430,12 @@ void MainWindow::on_pushButton_createSavePasport_2k_clicked()
         this->lastCheckDialog2K_.show();
     } else
         QMessageBox::StandardButton reply = QMessageBox::warning(this, "Warning",
-                                                                 "Процессы будут конфликтовать.\nДля дальнейшей работы закрой програму Word!");
+                                                                 "Процессы будут конфликтовать.\nДля дальнейшей работы закрой програму Word!\n"
+                                                                 "(Если приложение MS Word не запущено, а ты видишь меня, "
+                                                                 "значит у тебя включена возможность предварительного провмотра в папках, "
+                                                                 "которая запускает процесс WINWORD.\n"
+                                                                 "В этом случае необходимо завершить процесс WINWORD.EXE вручную "
+                                                                 "в диспетчере задач)");
 
 }
 
@@ -572,7 +578,12 @@ void MainWindow::on_pushButton_createSavePasport_tt_clicked()
         this->lastCheckDialogTT_.show();
     } else
         QMessageBox::StandardButton reply = QMessageBox::warning(this, "Warning",
-                                                                 "Для дальнейшей работы закрой програму Word!");
+                                                                 "Процессы будут конфликтовать.\nДля дальнейшей работы закрой програму Word!\n"
+                                                                 "(Если приложение MS Word не запущено, а ты видишь меня, "
+                                                                 "значит у тебя включена возможность предварительного провмотра в папках, "
+                                                                 "которая запускает процесс WINWORD.\n"
+                                                                 "В этом случае необходимо завершить процесс WINWORD.EXE вручную "
+                                                                 "в диспетчере задач)");
 }
 
 void MainWindow::on_pushButton_openPaint_tt_clicked()
@@ -655,8 +666,8 @@ void MainWindow::slotCreatePassportTT()
     PassportTT.SetVVerifiableTests(this->testDialog_.GetVerifiableTests());
     PassportTT.SetVUnVerifiableTests(this->testDialog_.GetUnVerifiableTests());
 
-    PassportTT.moveToThread(&this->threadTT_);
-    this->threadTT_.start();
+//    PassportTT.moveToThread(&this->threadTT_);
+//    this->threadTT_.start();// ТОБЫ БЫЛА МНОГОПОТОЧНОСТЬ С WINWORD НУЖНО НАПИСАТЬ CoEx где-то
 
     PassportTT.CreateDocument();
     PassportTT.SaveDocx();

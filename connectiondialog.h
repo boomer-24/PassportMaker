@@ -35,10 +35,14 @@ private slots:
     void on_pushButton_pin2_clicked();
     void on_pushButton_pin3_clicked();
     void on_pushButton_pin4_clicked();
+    void on_pushButton_handler_clicked();
     void on_pushButton_svpn_clicked();
     void on_pushButton_removeSelectedColumn_clicked();
     void on_pushButton_removeSelectedRow_clicked();    
     void on_pushButton_insertTester_clicked();
+
+
+    void on_pushButton_user_clicked();
 
 private:
     Ui::ConnectionDialog *ui_;

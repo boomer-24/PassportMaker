@@ -244,6 +244,12 @@ void ConnectionDialog::on_pushButton_pin4_clicked()
         this->InsertPin("Pin4");
 }
 
+void ConnectionDialog::on_pushButton_handler_clicked()
+{
+    if (!this->isTableWidgetContainsPin("HANDLER"))
+        this->InsertPin("HANDLER");
+}
+
 void ConnectionDialog::on_pushButton_svpn_clicked()
 {
     if (!this->isTableWidgetContainsPin("SVPN"))
@@ -267,4 +273,10 @@ void ConnectionDialog::on_pushButton_insertTester_clicked()
     int tester = this->ui_->lineEdit_insertTester->text().toInt();
     if (tester)
         this->InsertTester(tester);
+}
+
+void ConnectionDialog::on_pushButton_user_clicked()
+{
+    if (!this->isTableWidgetContainsPin("USER"))
+        this->InsertPin("USER");
 }
