@@ -8,8 +8,10 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets xml
 
-TARGET = PasportMaker
+TARGET = Paspartu
 TEMPLATE = app
+
+win32: RC_ICONS = $$PWD/paspart.ico
 
 CONFIG += qaxcontainer
 
@@ -33,7 +35,8 @@ SOURCES += main.cpp\
     jumpersdialog.cpp \
     connectiondialog.cpp \
     lastcheckdialog.cpp \
-    passportmaker2k.cpp
+    passportmaker2k.cpp \
+    softwareversiondialog.cpp
 
 HEADERS  += mainwindow.h \
     passportmakertt.h \
@@ -42,13 +45,15 @@ HEADERS  += mainwindow.h \
     jumpersdialog.h \
     connectiondialog.h \
     lastcheckdialog.h \
-    passportmaker2k.h
+    passportmaker2k.h \
+    softwareversiondialog.h
 
 FORMS    += mainwindow.ui \
     testsdialog.ui \
     jumpersdialog.ui \
     connectiondialog.ui \
-    lastcheckdialog.ui
+    lastcheckdialog.ui \
+    softwareversiondialog.ui
 
 RESOURCES += \
     res.qrc

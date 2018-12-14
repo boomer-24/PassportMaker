@@ -35,6 +35,8 @@ public:
     QString deviation() const;
     void setDeviation(const QString &deviation);
 
+    bool isEmpty();
+
 private:
     QStringList test_;
     QString name_;

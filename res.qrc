@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/logo">
+        <file>rainbow.png</file>
+        <file>paspart.ico</file>
+    </qresource>
+</RCC>

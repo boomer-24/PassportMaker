@@ -477,9 +477,9 @@ void PassportMaker2K::FillTableConnection()
         table_ = tables_->querySubObject("Add(Range,NumRows,NumColumns, DefaultTableBehavior, AutoFitBehavior)",
                                          range_->asVariant(), this->vvTableConnection_.size(), this->vvTableConnection_.first()/*.at(0)*/.size(), 1, 2);
 
-//        QAxObject* rows = table_->querySubObject("Rows()");
-//        qDebug() << "rows" << rows->asVariant().toString();   //НЕ РАБОТАЕТ ТАК
-//        rows->setProperty("Alignment", "wdAlignRowCenter");
+        //        QAxObject* rows = table_->querySubObject("Rows()");
+        //        qDebug() << "rows" << rows->asVariant().toString();   //НЕ РАБОТАЕТ ТАК
+        //        rows->setProperty("Alignment", "wdAlignRowCenter");
         for (int row = 0; row < this->vvTableConnection_.size(); row++)
         {
             for (int column = 0; column < this->vvTableConnection_.at(row).size(); column++)
@@ -496,7 +496,7 @@ void PassportMaker2K::FillTableConnection()
                     selection_->dynamicCall("moveDown()");
                     selection_->dynamicCall("moveDown()");
                     selection_->dynamicCall("moveDown()");
-                }                
+                }
                 QAxObject* cell = table_->querySubObject("Cell(Row,  Column)", row + 1, column + 1);
                 QAxObject* rangeCell = cell->querySubObject("Range()");
                 rangeCell->dynamicCall("InsertAfter(Text)", this->vvTableConnection_.at(row).at(column));
@@ -535,7 +535,15 @@ void PassportMaker2K::TestersList()
     font_->setProperty("Bold", false);
     selection_->dynamicCall("TypeText(const QString&)", "Оболочка: ");
     font_->setProperty("Bold", true);
-    selection_->dynamicCall("TypeText(const QString&)", this->selectedMode_);    /*selection2K_->dynamicCall("TypeParagraph()");*/
+    selection_->dynamicCall("TypeText(const QString&)", this->selectedMode_);
+    if (!this->softwareVersion_.isEmpty())
+    {
+        font_->setProperty("Bold", false);
+        selection_->dynamicCall("TypeText(const QString&)", " версия: ");
+        font_->setProperty("Bold", true);
+        selection_->dynamicCall("TypeText(const QString&)", this->softwareVersion_);
+    }
+    /*selection2K_->dynamicCall("TypeParagraph()");*/
 
     font_->setProperty("Bold", false);   selection_->dynamicCall("TypeParagraph()");
     selection_->dynamicCall("TypeText(const QString&)", "Адаптер универсальный: ");
@@ -588,10 +596,10 @@ void PassportMaker2K::TestersList()
 
 
     selection_->dynamicCall("TypeText(const QString&)", this->connectionInfo2K_);
-//    if (this->PIN_H_)
-//        selection_->dynamicCall("TypeText(const QString&)", this->connectionInfoPinH_);
-//    else
-//        selection_->dynamicCall("TypeText(const QString&)", this->connectionInfoPinS_);
+    //    if (this->PIN_H_)
+    //        selection_->dynamicCall("TypeText(const QString&)", this->connectionInfoPinH_);
+    //    else
+    //        selection_->dynamicCall("TypeText(const QString&)", this->connectionInfoPinS_);
 
 
 
@@ -842,3 +850,9 @@ void PassportMaker2K::setStrAndVvTableConnection(const QVector<QVector<QString> 
         }
     }
 }
+
+void PassportMaker2K::setSoftwareVersion(const QString &_softwareVersion)
+{
+    this->softwareVersion_ = _softwareVersion;
+}
+

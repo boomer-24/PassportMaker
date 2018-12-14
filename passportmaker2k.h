@@ -32,6 +32,7 @@ private:
     int tableNumber_ = 0;
 
     QString selectedMode_;
+    QString softwareVersion_;
     bool PIN_H_;
     QVector<QVector<QString>> vvTableConnection_;
     QString connectionInfo2K_;
@@ -111,6 +112,7 @@ public:
     const QStringList& GetSlFormat() const;
     void SetVJPos(const QVector<QPair<QString, QString>> &_vJPos);
     void setStrAndVvTableConnection(const QVector<QVector<QString> > &_vvTableConnection);
+    void setSoftwareVersion(const QString &_softwareVersion);
 };
 
 #endif // PASPORTMAKER2K_H

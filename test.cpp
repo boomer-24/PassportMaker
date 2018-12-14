@@ -101,3 +101,13 @@ void Test::setDeviation(const QString &deviation)
 {
     deviation_ = deviation;
 }
+
+bool Test::isEmpty()
+{
+    foreach (const QString& element , this->test_)
+    {
+        if (element != " ")
+            return false;
+    }
+    return true;
+}

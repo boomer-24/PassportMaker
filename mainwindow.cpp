@@ -4,7 +4,7 @@
 MainWindow::MainWindow(QWidget *_parent) : QMainWindow(_parent), ui_(new Ui::MainWindow)
 {
     this->ui_->setupUi(this);
-    this->setWindowTitle("Паспортогенератор");
+    this->setWindowTitle("Паспарту");
     this->setFixedSize(630, 690);
     if (QFile::exists("animals&formats.xml"))
     {
@@ -23,10 +23,10 @@ MainWindow::MainWindow(QWidget *_parent) : QMainWindow(_parent), ui_(new Ui::Mai
         this->ui_->lineEdit_inputAdapterName_2k->setText(this->adapterName2K_);
         this->ui_->lineEdit_inputAdapterNumber_2k->setText(this->adapterNumber2K_);
     } else this->ui_->textBrowser_info_2k->append("DAMN!!! Нет \"animals&formats.xml\"  в корне!");
-    if (QFile::exists("tests&filters.xml"))
+    if (QFile::exists("tests&filters&versions.xml"))
     {
-        this->InitializeTestsTT("tests&filters.xml");
-    } else this->ui_->textBrowser_info_2k->append("DAMN!!! Нет \"tests&filters.xml\"  в корне!");
+        this->InitializeTestsTT("tests&filters&versions.xml");
+    } else this->ui_->textBrowser_info_2k->append("DAMN!!! Нет \"tests&filters&versions.xml\"  в корне!");
 
     this->ui_->pushButton_openDirTT->setHidden(true);
     this->ui_->pushButton_openDir2K->setHidden(true);
@@ -34,14 +34,17 @@ MainWindow::MainWindow(QWidget *_parent) : QMainWindow(_parent), ui_(new Ui::Mai
     this->ui_->pushButton_jumpers->setEnabled(true);
     this->ui_->radioButton_jumpersYes->setChecked(true);
 
+    QObject::connect(&this->softwareVersionDialog_, SIGNAL(signalVersionValueChange(QString)),
+                     this, SLOT(slotChangeVersionLabel(QString)));
     QObject::connect(&this->lastCheckDialog2K_, SIGNAL(signalCreatePassport()), this, SLOT(slotCreatePassport2K()));
     QObject::connect(&this->lastCheckDialogTT_, SIGNAL(signalCreatePassport()), this, SLOT(slotCreatePassportTT()));
 }
 
 MainWindow::~MainWindow()
 {
-    this->SaveTestXml(this->testDialog_.GetTests(), this->testDialog_.GetFilters());
-//    this->threadTT_.quit(); // ТОБЫ БЫЛА МНОГОПОТОЧНОСТЬ С WINWORD НУЖНО НАПИСАТЬ CoEx где-то
+    this->SaveXml(this->testDialog_.GetTests(), this->testDialog_.GetFilters(),
+                  this->softwareVersionDialog_.getSlVersions());
+    //    this->threadTT_.quit(); // ТОБЫ БЫЛА МНОГОПОТОЧНОСТЬ С WINWORD НУЖНО НАПИСАТЬ CoEx где-то
     delete ui_;
 }
 
@@ -145,6 +148,7 @@ void MainWindow::InitializeTestsTT(const QString &_path)
             QDomNode domNode = domElement.firstChild();
             QStringList tests;
             QStringList filters;
+            QStringList softwareVersions;
             while(!domNode.isNull())
             {
                 if(domNode.isElement())
@@ -154,6 +158,7 @@ void MainWindow::InitializeTestsTT(const QString &_path)
                     {
                         if(domElement.tagName() == "test_TT") tests.push_back(domElement.text());
                         if(domElement.tagName() == "filter_TT") filters.push_back(domElement.text());
+                        if(domElement.tagName() == "softwareVersion_2K") softwareVersions.push_back(domElement.text());
                         else qDebug() << "Tag ne find";
                     }
                     domNode = domNode.nextSibling();
@@ -161,6 +166,11 @@ void MainWindow::InitializeTestsTT(const QString &_path)
             }
             this->testDialog_.SetTests(tests);
             this->testDialog_.SetFilters(filters);
+            if (!softwareVersions.isEmpty())
+            {
+                this->softwareVersionDialog_.setSlVersions(softwareVersions);
+                this->ui_->label_softwareVersionValue_2K->setText(softwareVersions.last());\
+            }
         } else qDebug() << "It`s no XML!";
     } else qDebug() << "File not open =/";
 }
@@ -176,9 +186,9 @@ QDomElement MainWindow::MakeElement(QDomDocument &_doc, const QString &_name, co
     return domElement;
 }
 
-void MainWindow::SaveTestXml(const QStringList &_slTests, const QStringList &_slFilters)
+void MainWindow::SaveXml(const QStringList &_slTests, const QStringList &_slFilters, const QStringList &_slSoftwareVersions)
 {
-    QFile file("tests&filters.xml");
+    QFile file("tests&filters&versions.xml");
     if (file.open(QIODevice::WriteOnly))
     {
         QXmlStreamWriter xmlWriter(&file);
@@ -195,6 +205,12 @@ void MainWindow::SaveTestXml(const QStringList &_slTests, const QStringList &_sl
         {
             xmlWriter.writeStartElement("test_TT");
             xmlWriter.writeCharacters(test);
+            xmlWriter.writeEndElement();
+        }
+        for (const QString& swVersion : _slSoftwareVersions)
+        {
+            xmlWriter.writeStartElement("softwareVersion_2K");
+            xmlWriter.writeCharacters(swVersion);
             xmlWriter.writeEndElement();
         }
         xmlWriter.writeEndElement();
@@ -358,6 +374,14 @@ void MainWindow::on_pushButton_createSavePasport_2k_clicked()
                                                                                       "Без этого никак.");
             return;
         }
+
+        QDir dirForSave(this->ui_->lineEdit_dirPath_2k->text());
+        if (!dirForSave.exists())
+        {
+            QMessageBox::StandardButton reply = QMessageBox::warning(this, "Warning", "Указана несуществующая папка!");
+            return;
+        }
+
         QVector<QPair<QString, QString>> vControlMessage;
 
         (this->ui_->comboBox_devName_2k->currentText() == " " || this->ui_->comboBox_devName_2k->currentText().isNull() ||
@@ -425,6 +449,26 @@ void MainWindow::on_pushButton_createSavePasport_2k_clicked()
                 vControlMessage.push_back(QPair<QString, QString>("Перемычки", jumpersValue));
             } else vControlMessage.push_back(QPair<QString, QString>("Перемычек", "Нет"));
         } else vControlMessage.push_back(QPair<QString, QString>("Перемычек", "Нет"));
+
+        (this->ui_->label_softwareVersionValue_2K->text() == "") ?
+                    vControlMessage.push_back(QPair<QString, QString>("Версия оболочки", "")) :
+                    vControlMessage.push_back(QPair<QString, QString>("Версия оболочки", this->ui_->label_softwareVersionValue_2K->text()));
+
+        if (this->connectionDialog_.getTableContent().size() < 2)
+            vControlMessage.push_back(QPair<QString, QString>("Подключение к тестерам", ""));
+        else
+        {
+            QString testers;
+            for (int i = 1; i < this->connectionDialog_.getTableContent().at(0).size(); i++)
+            {
+                testers.append(this->connectionDialog_.getTableContent().at(0).at(i));
+                if (i < this->connectionDialog_.getTableContent().at(0).size() - 1)
+                    testers.append(", ");
+
+            }
+            vControlMessage.push_back(QPair<QString, QString>("Подключение к тестерам",
+                                                              testers));
+        }
 
         this->lastCheckDialog2K_.FillTable(vControlMessage);
         this->lastCheckDialog2K_.show();
@@ -526,7 +570,7 @@ void MainWindow::on_pushButton_selectDirectory_tt_clicked()
     this->ui_->lineEdit_dirPath_tt->setText(this->dirPath_TT_);
 }
 
-void MainWindow::on_pushButton_createSavePasport_tt_clicked()
+void MainWindow:: on_pushButton_createSavePasport_tt_clicked()
 {
     if (!this->isWordRunning())
     {
@@ -537,6 +581,14 @@ void MainWindow::on_pushButton_createSavePasport_tt_clicked()
                                                                                       "Без этого никак.");
             return;
         }
+
+        QDir dirForSave(this->ui_->lineEdit_dirPath_tt->text());
+        if (!dirForSave.exists())
+        {
+            QMessageBox::StandardButton reply = QMessageBox::warning(this, "Warning", "Указана несуществующая папка!");
+            return;
+        }
+
         QVector<QPair<QString, QString>> vControlMessage;
 
         (this->ui_->comboBox_devName_tt->currentText() == " " || this->ui_->comboBox_devName_tt->currentText().isNull() ||
@@ -573,6 +625,23 @@ void MainWindow::on_pushButton_createSavePasport_tt_clicked()
                     vControlMessage.push_back(QPair<QString, QString>("Изображение как подключать КУ",
                                                                       this->ui_->lineEdit_dirPath_tt->text().append("/Безымянный.png"))) :
                     vControlMessage.push_back(QPair<QString, QString>("Изображение как подключать КУ", ""));
+
+        if (this->testDialog_.GetVerifiableTests().first().isEmpty())
+            vControlMessage.push_back(QPair<QString, QString>("Перечень проверяемых параметров", ""));
+        else
+        {
+            vControlMessage.push_back(QPair<QString, QString>("Перечень проверяемых параметров",
+                                                              QString::number(this->testDialog_.GetVerifiableTests().size())));
+        }
+
+        if (this->testDialog_.GetUnVerifiableTests().first().isEmpty())
+            vControlMessage.push_back(QPair<QString, QString>("Перечень непроверяемых параметров", ""));
+        else
+        {
+            vControlMessage.push_back(QPair<QString, QString>("Перечень непроверяемых параметров",
+                                                              QString::number(this->testDialog_.GetUnVerifiableTests().size())));
+        }
+
 
         this->lastCheckDialogTT_.FillTable(vControlMessage);
         this->lastCheckDialogTT_.show();
@@ -621,8 +690,11 @@ void MainWindow::slotCreatePassport2K()
     Passport2K.InitializeElementsSl(this->slElements2K_);
     Passport2K.InitializeFileFormatSl(this->slFormats2K_);
 
+
     (this->ui_->radioButton_control2k_2k->isChecked()) ? Passport2K.SetMode("Control2K") : (Passport2K.SetMode("Memory"));
-    (this->ui_->radioButton_pinH_2k->isChecked()) ? Passport2K.SetPinH(true) : Passport2K.SetPinH(false);
+    //    (this->ui_->radioButton_pinH_2k->isChecked()) ? Passport2K.SetPinH(true) : Passport2K.SetPinH(false);
+
+    Passport2K.setSoftwareVersion(this->softwareVersionDialog_.getSelectedVersion());
 
     Passport2K.SetDirPath(this->ui_->lineEdit_dirPath_2k->text());
 
@@ -666,14 +738,19 @@ void MainWindow::slotCreatePassportTT()
     PassportTT.SetVVerifiableTests(this->testDialog_.GetVerifiableTests());
     PassportTT.SetVUnVerifiableTests(this->testDialog_.GetUnVerifiableTests());
 
-//    PassportTT.moveToThread(&this->threadTT_);
-//    this->threadTT_.start();// ТОБЫ БЫЛА МНОГОПОТОЧНОСТЬ С WINWORD НУЖНО НАПИСАТЬ CoEx где-то
+    //    PassportTT.moveToThread(&this->threadTT_);
+    //    this->threadTT_.start();// ТОБЫ БЫЛА МНОГОПОТОЧНОСТЬ С WINWORD НУЖНО НАПИСАТЬ CoEx где-то
 
     PassportTT.CreateDocument();
     PassportTT.SaveDocx();
 
     this->ui_->textBrowser_info_tt->append(QString("Паспорт сохранен в ").append(this->dirPath_TT_));
     this->ui_->pushButton_openDirTT->setHidden(false);
+}
+
+void MainWindow::slotChangeVersionLabel(QString _version)
+{
+    this->ui_->label_softwareVersionValue_2K->setText(_version);
 }
 
 void MainWindow::on_pushButton_testDialogBox_clicked()
@@ -711,4 +788,9 @@ void MainWindow::on_radioButton_jumpersNo_clicked()
 void MainWindow::on_pushButton_connectionDialog_clicked()
 {
     this->connectionDialog_.show();
+}
+
+void MainWindow::on_pushButton_selectVersion_clicked()
+{
+    this->softwareVersionDialog_.show();
 }

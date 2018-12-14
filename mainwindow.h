@@ -7,6 +7,7 @@
 #include "jumpersdialog.h"
 #include "connectiondialog.h"
 #include "lastcheckdialog.h"
+#include "softwareversiondialog.h"
 
 #include <QMainWindow>
 #include <QFileDialog>
@@ -29,6 +30,7 @@ class MainWindow : public QMainWindow
     Ui::MainWindow *ui_;
     TestsDialog testDialog_;
     JumpersDialog jumpersDialog_;
+    SoftwareVersionDialog softwareVersionDialog_;
     ConnectionDialog connectionDialog_;
     LastCheckDialog lastCheckDialog2K_;
     LastCheckDialog lastCheckDialogTT_;
@@ -49,7 +51,7 @@ public:
     bool isWordRunning();
     void InitializeTestsTT(const QString& _path);
     QDomElement MakeElement(QDomDocument& _doc, const QString& _name, const QString& _value);
-    void SaveTestXml(const QStringList &_slTests, const QStringList &_slFilters);    
+    void SaveXml(const QStringList &_slTests, const QStringList &_slFilters, const QStringList &_slSoftwareVersions);
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -57,6 +59,7 @@ protected:
 public slots:
     void slotCreatePassport2K();
     void slotCreatePassportTT();
+    void slotChangeVersionLabel(QString _version);
 
 private slots:
     void on_comboBox_devName_2k_activated(const QString &arg1);
@@ -78,6 +81,7 @@ private slots:
     void on_pushButton_selectDirectory_tt_clicked();
     void on_pushButton_openPaint_tt_clicked();
     void on_pushButton_createSavePasport_tt_clicked();
+
     void on_pushButton_testDialogBox_clicked();
     void on_pushButton_openDirTT_clicked();
     void on_pushButton_openDir2K_clicked();
@@ -86,7 +90,7 @@ private slots:
     void on_radioButton_jumpersYes_clicked();
     void on_radioButton_jumpersNo_clicked();
     void on_pushButton_connectionDialog_clicked();
-
+    void on_pushButton_selectVersion_clicked();
 };
 
 #endif // MAINWINDOW_H
